@@ -7,13 +7,19 @@
 
 import Foundation
 
-struct FeatureVoterCountAPI: FeatureVoter {
-    let feature: RoadmapFeature
+public struct FeatureVoterCountAPI: FeatureVoter {
     let namespace: String
+    
+    /// See `https://countapi.xyz/` for more information.
+    ///
+    /// - Parameter namespace: A unique namespace to use matching your app.
+    public init(namespace: String) {
+        self.namespace = namespace
+    }
     
     /// Fetches the current count for the given feature.
     /// - Returns: The current `count`, else `0` if unsuccessful.
-    func fetch() async -> Int {
+    public func fetch(for feature: RoadmapFeature) async -> Int {
         do {
             let urlString = "https://api.countapi.xyz/get/\(namespace)/feature\(feature.id)"
             let count: RoadmapFeatureVotingCount = try await JSONDataFetcher.loadJSON(fromURLString: urlString)
@@ -26,7 +32,7 @@ struct FeatureVoterCountAPI: FeatureVoter {
 
     /// Votes for the given feature.
     /// - Returns: The new `count` if successful.
-    func vote() async -> Int? {
+    public func vote(for feature: RoadmapFeature) async -> Int? {
         do {
             let urlString = "https://api.countapi.xyz/hit/\(namespace)/feature\(feature.id)"
             let count: RoadmapFeatureVotingCount = try await JSONDataFetcher.loadJSON(fromURLString: urlString)

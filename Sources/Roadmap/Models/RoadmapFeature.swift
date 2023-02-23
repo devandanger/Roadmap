@@ -7,8 +7,8 @@
 
 import Foundation
 
-struct RoadmapFeature: Codable, Identifiable {
-    let id: String
+public struct RoadmapFeature: Codable, Identifiable {
+    public let id: String
     private let title: String?
     private var status: String? = nil
     private var description : String? = nil
