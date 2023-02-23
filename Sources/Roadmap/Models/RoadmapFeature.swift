@@ -55,7 +55,7 @@ extension [LocalizedItem]? {
 }
 
 extension RoadmapFeature {
-    static func sample() -> RoadmapFeature {
-        .init(id: UUID().uuidString, title: "WatchOS Support", status: "Backlog")
+    static func sample(id: String = UUID().uuidString) -> RoadmapFeature {
+        .init(id: id, title: "WatchOS Support", status: "Backlog")
     }
 }
