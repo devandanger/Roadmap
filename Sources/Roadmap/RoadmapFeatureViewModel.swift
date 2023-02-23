@@ -11,17 +11,19 @@ import SwiftUI
 final class RoadmapFeatureViewModel: ObservableObject {
     let feature: RoadmapFeature
     let configuration: RoadmapConfiguration
+    let featureVoter: FeatureVoter
 
     @Published var voteCount = 0
 
     init(feature: RoadmapFeature, configuration: RoadmapConfiguration) {
         self.feature = feature
         self.configuration = configuration
+        self.featureVoter = FeatureVoterCountAPI(feature: feature, namespace: configuration.namespace)
     }
     
     @MainActor
     func getCurrentVotes() async {
-        voteCount = await FeatureVotingCountFetcher(feature: feature, namespace: configuration.namespace).fetch()
+        voteCount = await featureVoter.fetch()
     }
 
     @MainActor
@@ -30,7 +32,8 @@ final class RoadmapFeatureViewModel: ObservableObject {
             print("already voted for this, can't vote again")
             return
         }
-        let newCount = await FeatureVoter(feature: feature, namespace: configuration.namespace).vote()
+        
+        let newCount = await featureVoter.vote()
         voteCount = newCount ?? (voteCount + 1)
     }
 }
