@@ -22,16 +22,9 @@ final class RoadmapTests: XCTestCase {
         await model.getCurrentVotes()
         XCTAssertEqual(model.voteCount, 1)
         
-        let exp = expectation(description: "vote increased")
-        model.vote()
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { // wait for main actor task
-            XCTAssertEqual(model.voteCount, 2)
-            XCTAssertTrue(feature.hasVoted)
-            exp.fulfill()
-        }
-        
-        wait(for: [ exp ], timeout: 1)
+        await model.vote()
+        XCTAssertEqual(model.voteCount, 2)
+        XCTAssertTrue(feature.hasVoted)
     }
 }
 
